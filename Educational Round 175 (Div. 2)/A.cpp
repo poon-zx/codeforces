@@ -45,28 +45,12 @@ constexpr array<array<int, 2>, 4> directions{{
 
 void solve() {
   int n;
-  int x;
-  cin>>n>>x;
-  int curr=0;
-  vector<int> v(n,x);
-  bool flag=true;
-  for (int i=0;i<n-1;i++) {
-    if (((curr|i)&x)==(curr|i)) {
-      v[i]=i;
-      curr|=i;
-    } else {
-      flag=false;
-      break;
-    }
-  }
-  if (flag&&(curr|(n-1))==x) {
-    v[n-1]=n-1;
-  }
-  for (auto j:v) {
-    cout<<j<<" ";
-  }
-  cout<<"\n";
-  
+  cin>>n;
+  ll res=((n/15)+1)*3;
+  if (n%15==0) {
+    res-=2;
+  } else if (n%15==1) {res-=1;}
+  cout<<res<<"\n";
 }
 
 int main() {

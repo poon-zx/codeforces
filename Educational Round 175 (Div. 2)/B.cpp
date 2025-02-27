@@ -44,29 +44,51 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int n;
-  int x;
-  cin>>n>>x;
-  int curr=0;
-  vector<int> v(n,x);
-  bool flag=true;
-  for (int i=0;i<n-1;i++) {
-    if (((curr|i)&x)==(curr|i)) {
-      v[i]=i;
-      curr|=i;
-    } else {
-      flag=false;
+  int n,x;
+  ll k;
+  cin>>n>>x>>k;
+  cin.ignore();
+  string s;
+  getline(cin,s);
+  int moves_to_zero=0;
+  int x_copy=x;
+  int zero_res=0,back_to_zero=0;
+  int saved_zero=numeric_limits<int>::max();
+  for (char c:s) {
+    if (c=='L') {
+      x_copy--;
+    }
+    else {
+      x_copy++;
+    }
+    moves_to_zero++;
+    k--;
+    if (x_copy==0||k==0) {break;}
+  }
+  for (char c:s) {
+    if (c=='L') {
+      zero_res--;
+    }
+    else {
+      zero_res++;
+    }
+    back_to_zero++;
+    if (zero_res==0) {
+      saved_zero=back_to_zero;
       break;
     }
   }
-  if (flag&&(curr|(n-1))==x) {
-    v[n-1]=n-1;
+  //cout<<k<<" "<<saved_zero<<" ";
+  if (x_copy!=0) {
+    cout<<0<<"\n";
+    return;
   }
-  for (auto j:v) {
-    cout<<j<<" ";
+  if (saved_zero==numeric_limits<int>::max()) {
+    cout<<1<<"\n";
+  } else {
+    cout<<1+k/saved_zero<<"\n";
   }
-  cout<<"\n";
-  
+
 }
 
 int main() {
