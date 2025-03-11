@@ -43,45 +43,36 @@ constexpr array<array<int, 2>, 4> directions{{
 
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
-int possible(vector<ll> v, ll minn, string s) {
-  char last='R';
-  int count=0;
-  for (int i=0;i<s.size();i++) {
-    if (v[i]>minn) {
-      if (s[i]=='B'&&last!='B') {
-        count++;
-      }
-      last=s[i];
-    }
+vector<pair<ll,ll>> rec(ll k,ll x0,ll y0) {
+  if (!k) {
+    return {};
   }
-  return count;
-};
+  ll delta=0;
+  while (delta*(delta-1)/2<=k) {
+    delta++;
+  }
+  delta--;
+  auto remaining=rec(k-delta*(delta-1)/2,x0+delta+1,y0+1);
+  vector<pair<ll,ll>> ans;
+  for (int x=x0;x<x0+delta;x++) {
+    ans.push_back({x,y0});
+  }
+  ans.insert(ans.end(),remaining.begin(),remaining.end());
+  return ans;
+}
 
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  cin.ignore();
-  string s;
-  getline(cin,s);
-  vector<ll> v(n);
-  ll minn=0;
-  ll maxx=1000000000;
-  for (int i=0;i<n;i++) {
-    cin>>v[i];
+  ll k;
+  cin>>k;
+  if (k==0) {
+    cout<<"1\n2 3\n";
+    return;
   }
-  ll res=numeric_limits<ll>::max();
-  while (minn<=maxx) {
-    ll m=minn+(maxx-minn)/2;
-    if (possible(v,m,s)>k) {
-      minn=m+1;
-    } else {
-      maxx=m-1;
-      res=min(res,m);
-    }
+  auto ans=rec(k,0,0);
+  cout<<ans.size()<<"\n";
+  for (auto [x,y]:ans) {
+    cout<<x<<" "<<y<<"\n";
   }
-  cout<<res<<"\n";
-
-  
 }
 
 int main() {

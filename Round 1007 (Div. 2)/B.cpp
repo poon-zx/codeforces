@@ -43,45 +43,40 @@ constexpr array<array<int, 2>, 4> directions{{
 
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
-int possible(vector<ll> v, ll minn, string s) {
-  char last='R';
-  int count=0;
-  for (int i=0;i<s.size();i++) {
-    if (v[i]>minn) {
-      if (s[i]=='B'&&last!='B') {
-        count++;
-      }
-      last=s[i];
-    }
-  }
-  return count;
+bool perfect(ll num) {
+  ll n=sqrt(num);
+  if (n*n==num) {return true;}
+  else {return false;}
 };
 
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  cin.ignore();
-  string s;
-  getline(cin,s);
-  vector<ll> v(n);
-  ll minn=0;
-  ll maxx=1000000000;
-  for (int i=0;i<n;i++) {
-    cin>>v[i];
+  ll n;
+  cin>>n;
+  ll total_sum=n*(n+1)/2;
+  if (perfect(total_sum)) {
+    cout<<-1<<"\n";
+    return;
   }
-  ll res=numeric_limits<ll>::max();
-  while (minn<=maxx) {
-    ll m=minn+(maxx-minn)/2;
-    if (possible(v,m,s)>k) {
-      minn=m+1;
+  vector<int> perm;
+  ll curr_sum=0;
+  ll i=1;
+  while (i<=n) {
+    if (!perfect(curr_sum+i)) {
+      perm.push_back(i);
+      curr_sum+=i;
+      i++;
     } else {
-      maxx=m-1;
-      res=min(res,m);
+      perm.push_back(i+1);
+      perm.push_back(i);
+      curr_sum+=i;
+      curr_sum+=i+1;
+      i+=2;
     }
   }
-  cout<<res<<"\n";
-
-  
+  for (auto item:perm) {
+    cout<<item<<" ";
+  }
+  cout<<"\n";
 }
 
 int main() {

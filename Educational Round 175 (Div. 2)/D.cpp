@@ -32,7 +32,7 @@ using ll = long long;
 
 using ld = long double;
 
-constexpr int MOD = 1'000'000'007;
+constexpr int MOD = 998244353;
 
 constexpr array<array<int, 2>, 4> directions{{
     {0, 1},
@@ -43,45 +43,37 @@ constexpr array<array<int, 2>, 4> directions{{
 
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
-int possible(vector<ll> v, ll minn, string s) {
-  char last='R';
-  int count=0;
-  for (int i=0;i<s.size();i++) {
-    if (v[i]>minn) {
-      if (s[i]=='B'&&last!='B') {
-        count++;
-      }
-      last=s[i];
-    }
-  }
-  return count;
+int add(int x,int y) {
+  x+=y;
+  if (x>=MOD) {x-=MOD;}
+  if (x<0) {x+=MOD;}
+  return x;
 };
 
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  cin.ignore();
-  string s;
-  getline(cin,s);
-  vector<ll> v(n);
-  ll minn=0;
-  ll maxx=1000000000;
-  for (int i=0;i<n;i++) {
-    cin>>v[i];
+  int n;
+  cin>>n;
+  vector<int> p(n),d(n);
+  vector<vector<int>> vs(n);
+  for (int v=1;v<n;v++) {
+    cin>>p[v];
+    --p[v];
+    d[v]=d[p[v]]+1;
+    vs[d[v]].push_back(v);
   }
-  ll res=numeric_limits<ll>::max();
-  while (minn<=maxx) {
-    ll m=minn+(maxx-minn)/2;
-    if (possible(v,m,s)>k) {
-      minn=m+1;
-    } else {
-      maxx=m-1;
-      res=min(res,m);
+  vector<int> dp(n),tot(n);
+  dp[0]=tot[0]=1;
+  for (int i=1;i<n;i++) {
+    for (int v:vs[i]) {
+      dp[v]=add(tot[d[v]-1],d[v]==1?0:-dp[p[v]]);
+      tot[d[v]]=add(tot[d[v]],dp[v]);
     }
   }
-  cout<<res<<"\n";
-
-  
+  int ans=0;
+  for (int v=0;v<n;v++) {
+    ans=add(ans,dp[v]);
+  }
+  cout<<ans<<"\n";
 }
 
 int main() {

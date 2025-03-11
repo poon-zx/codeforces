@@ -43,45 +43,58 @@ constexpr array<array<int, 2>, 4> directions{{
 
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
-int possible(vector<ll> v, ll minn, string s) {
-  char last='R';
-  int count=0;
-  for (int i=0;i<s.size();i++) {
-    if (v[i]>minn) {
-      if (s[i]=='B'&&last!='B') {
-        count++;
-      }
-      last=s[i];
-    }
-  }
-  return count;
-};
-
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  cin.ignore();
-  string s;
-  getline(cin,s);
-  vector<ll> v(n);
-  ll minn=0;
-  ll maxx=1000000000;
-  for (int i=0;i<n;i++) {
+  ll n;
+  cin>>n;
+  vector<ll> v(2*n);
+  unordered_set<ll> set;
+  for (ll i=0;i<2*n;i++) {
     cin>>v[i];
+    set.insert(v[i]);
   }
-  ll res=numeric_limits<ll>::max();
-  while (minn<=maxx) {
-    ll m=minn+(maxx-minn)/2;
-    if (possible(v,m,s)>k) {
-      minn=m+1;
+  sort(v.begin(),v.end());
+  vector<ll> odd;
+  vector<ll> even;
+  bool oddbool=true;
+  ll odd_sum=0,even_sum=0;
+  ll first_sum=0,second_sum=0;
+  for (ll i=1;i<=2*n;i++) {
+    ll num=v[i-1];
+    if (oddbool) {
+      odd.push_back(num);
+      odd_sum+=num;
+    }
+    else {
+      even.push_back(num);
+      even_sum+=num;
+    }
+    oddbool=!oddbool;
+    if (i<=n) {
+      first_sum+=num;
     } else {
-      maxx=m-1;
-      res=min(res,m);
+      second_sum+=num;
     }
   }
-  cout<<res<<"\n";
-
-  
+  ll diff=even_sum-odd_sum;
+  if (set.find(diff)!=set.end()) {
+    diff=second_sum-first_sum;
+    cout<<diff<<" ";
+    int l=0;
+    int r=v.size()-1;
+    while (l<r) {
+      cout<<v[r]<<" ";
+      cout<<v[l]<<" ";
+      l++;
+      r--;
+    }
+    return;
+  } 
+  odd.push_back(diff);
+  for (int i=0;i<even.size();i++) {
+    cout<<odd[i]<<" ";
+    cout<<even[i]<<" ";
+  }
+  cout<<odd[odd.size()-1]<<"\n";
 }
 
 int main() {

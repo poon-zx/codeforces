@@ -43,45 +43,33 @@ constexpr array<array<int, 2>, 4> directions{{
 
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
-int possible(vector<ll> v, ll minn, string s) {
-  char last='R';
-  int count=0;
-  for (int i=0;i<s.size();i++) {
-    if (v[i]>minn) {
-      if (s[i]=='B'&&last!='B') {
-        count++;
-      }
-      last=s[i];
-    }
-  }
-  return count;
-};
-
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  cin.ignore();
-  string s;
-  getline(cin,s);
-  vector<ll> v(n);
-  ll minn=0;
-  ll maxx=1000000000;
-  for (int i=0;i<n;i++) {
-    cin>>v[i];
+  int n,st,en;
+  cin>>n>>st>>en;
+  vector adj(n + 1, vector<int> ());
+  for (int i=1;i<n;i++) {
+    int a,b;
+    cin>>a>>b;
+    adj[a].push_back(b);
+    adj[b].push_back(a);
   }
-  ll res=numeric_limits<ll>::max();
-  while (minn<=maxx) {
-    ll m=minn+(maxx-minn)/2;
-    if (possible(v,m,s)>k) {
-      minn=m+1;
-    } else {
-      maxx=m-1;
-      res=min(res,m);
+  vector dis(n+1, vector<int>());
+  vector<int> d(n+1);
+  auto dfs = [&](auto &&self, int v, int par) -> void {
+    d[v]=d[par]+1;
+    dis[d[v]].push_back(v);
+    for (int u:adj[v]) {
+      if (u==par) continue;
+      self(self,u,v);
+    }
+  };
+  dfs(dfs,en,0);
+  for (int i=n;i>=1;i--) {
+    for (int j:dis[i]) {
+      cout<<j<<" ";
     }
   }
-  cout<<res<<"\n";
-
-  
+  cout<<"\n";
 }
 
 int main() {
