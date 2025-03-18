@@ -45,41 +45,31 @@ constexpr array<array<int, 2>, 4> directions{{
 
 void solve() {
   int n;
-  int64_t l,r;
-  cin>>n>>l>>r;
-  vector<int> a(n+1);
+  cin>>n;
+  vector<string> op0(n+1),op1(n+1);
+  vector<int> val0(n+1),val1(n+1);
   for (int i=1;i<=n;i++) {
-    cin>>a[i];
+    cin>>op0[i]>>val0[i]>>op1[i]>>val1[i];
   }
-  vector<int> pref(n+1);
+  vector<int> latest_multiply(n+2,0);
+  for (int i=n;i>0;i--) {
+    if (op0[i]=="+"&&op1[i]=="+") latest_multiply[i]=latest_multiply[i+1];
+    else if (op0[i]=="x"&&op1[i]=="+") latest_multiply[i]=0;
+    else if (op0[i]=="+"&&op1[i]=="x") latest_multiply[i]=1;
+    else if (val0[i]>val1[i]) latest_multiply[i]=0;
+    else if (val0[i]<val1[i]) latest_multiply[i]=1;
+    else latest_multiply[i]=latest_multiply[i+1];
+  }
+  vector<ll> a(2,1);
   for (int i=1;i<=n;i++) {
-    pref[i]=pref[i-1]+a[i];
+    ll gained=0;
+    if (op0[i]=="+") gained+=val0[i];
+    else gained+=(val0[i]-1LL)*a[0];
+    if (op1[i]=="+") gained+=val1[i];
+    else gained+=(val1[i]-1LL)*a[1];
+    a[latest_multiply[i+1]]+=gained;
   }
-  if (n%2==0) {
-    n++;
-    int cur=pref[n/2]&1;
-    a.push_back(cur);
-    pref.push_back(pref.back()+cur);
-  }
-  for (int i=n+1;i<=n*2;i++) {
-    a.push_back(pref[i/2]&1);
-    pref.push_back(pref[i-1]+a[i]);
-  }
-  int p=pref[n]&1;
-  auto get=[&](int64_t x) {
-    int ret=0;
-    while (true) {
-      if (x<=n*2) {
-        ret^=a[x];
-        break;
-      }
-      ret^=p;
-      if ((x/2-n)%2==0) break;
-      x/=2;
-    }
-    return ret;
-  };
-  cout<<get(l)<<"\n";
+  cout<<a[0]+a[1]<<"\n";
 }
 
 int main() {

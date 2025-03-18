@@ -25,6 +25,7 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
+#include<bits/stdc++.h>
 
 using namespace std;
 
@@ -44,42 +45,25 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int n;
-  int64_t l,r;
-  cin>>n>>l>>r;
-  vector<int> a(n+1);
-  for (int i=1;i<=n;i++) {
-    cin>>a[i];
+  mt19937 mt(727);
+  uniform_int_distribution uni(1,3);
+  int n; cin>>n;
+  if (n<0) return;
+  vector<int> vec(n);
+  for (int i=0;i<n;i++) vec[i]=i+1;
+  shuffle(begin(vec),end(vec),mt);
+  int ii=vec[0],jj=vec[1],kk=vec[2];
+  while(true) {
+    cout<<"? "<<ii<<" "<<jj<<" "<<kk<<endl;
+    int id;cin>>id;
+    if (id<0) return;
+    if (id==0) break;
+    int sw=uni(mt);
+    if (sw==1) ii=id;
+    else if (sw==2)jj=id;
+    else kk=id;
   }
-  vector<int> pref(n+1);
-  for (int i=1;i<=n;i++) {
-    pref[i]=pref[i-1]+a[i];
-  }
-  if (n%2==0) {
-    n++;
-    int cur=pref[n/2]&1;
-    a.push_back(cur);
-    pref.push_back(pref.back()+cur);
-  }
-  for (int i=n+1;i<=n*2;i++) {
-    a.push_back(pref[i/2]&1);
-    pref.push_back(pref[i-1]+a[i]);
-  }
-  int p=pref[n]&1;
-  auto get=[&](int64_t x) {
-    int ret=0;
-    while (true) {
-      if (x<=n*2) {
-        ret^=a[x];
-        break;
-      }
-      ret^=p;
-      if ((x/2-n)%2==0) break;
-      x/=2;
-    }
-    return ret;
-  };
-  cout<<get(l)<<"\n";
+  cout<<"! "<<ii<<" "<<jj<<" "<<kk<<endl;
 }
 
 int main() {

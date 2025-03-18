@@ -44,42 +44,26 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int n;
-  int64_t l,r;
-  cin>>n>>l>>r;
-  vector<int> a(n+1);
-  for (int i=1;i<=n;i++) {
-    cin>>a[i];
-  }
-  vector<int> pref(n+1);
-  for (int i=1;i<=n;i++) {
-    pref[i]=pref[i-1]+a[i];
-  }
-  if (n%2==0) {
-    n++;
-    int cur=pref[n/2]&1;
-    a.push_back(cur);
-    pref.push_back(pref.back()+cur);
-  }
-  for (int i=n+1;i<=n*2;i++) {
-    a.push_back(pref[i/2]&1);
-    pref.push_back(pref[i-1]+a[i]);
-  }
-  int p=pref[n]&1;
-  auto get=[&](int64_t x) {
-    int ret=0;
-    while (true) {
-      if (x<=n*2) {
-        ret^=a[x];
-        break;
-      }
-      ret^=p;
-      if ((x/2-n)%2==0) break;
-      x/=2;
+  int n,k;
+  cin>>n>>k;
+  vector<ll> v(n);
+  for (int i=0;i<n;i++) cin>>v[i];
+  if (k==1) {
+    ll res=0;
+    for (int i=0;i<n;i++) {
+      if (i==0) res=max(res,v[i]+v[v.size()-1]);
+      else if (i==n-1) res=max(res,v[i]+v[0]);
+      else res=max(res,v[i]+max(v[0],v[v.size()-1]));
     }
-    return ret;
-  };
-  cout<<get(l)<<"\n";
+    cout<<res<<"\n";
+    return;
+  }
+  sort(v.begin(),v.end(),greater<ll>());
+  ll res=0;
+  for (int i=0;i<k+1;i++) {
+    res+=v[i];
+  }
+  cout<<res<<"\n";
 }
 
 int main() {

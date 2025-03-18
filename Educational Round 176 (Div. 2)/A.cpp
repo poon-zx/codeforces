@@ -44,42 +44,18 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int n;
-  int64_t l,r;
-  cin>>n>>l>>r;
-  vector<int> a(n+1);
-  for (int i=1;i<=n;i++) {
-    cin>>a[i];
+  ll n,k;
+  cin>>n>>k;
+  ll res=1;
+  if (k>=n) {
+    cout<<1<<"\n";
+    return;
   }
-  vector<int> pref(n+1);
-  for (int i=1;i<=n;i++) {
-    pref[i]=pref[i-1]+a[i];
-  }
-  if (n%2==0) {
-    n++;
-    int cur=pref[n/2]&1;
-    a.push_back(cur);
-    pref.push_back(pref.back()+cur);
-  }
-  for (int i=n+1;i<=n*2;i++) {
-    a.push_back(pref[i/2]&1);
-    pref.push_back(pref[i-1]+a[i]);
-  }
-  int p=pref[n]&1;
-  auto get=[&](int64_t x) {
-    int ret=0;
-    while (true) {
-      if (x<=n*2) {
-        ret^=a[x];
-        break;
-      }
-      ret^=p;
-      if ((x/2-n)%2==0) break;
-      x/=2;
-    }
-    return ret;
-  };
-  cout<<get(l)<<"\n";
+  if (res%2==0) n-=(k-1);
+  else n-=k;
+  res+=n/(k-1);
+  if (n%(k-1)!=0) res++;
+  cout<<res<<"\n";
 }
 
 int main() {

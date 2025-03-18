@@ -62,3 +62,31 @@ class FenwickTree {
   const int n;
   std::vector<int> tree;
 };
+
+// Helper function to convert __int128 to string
+string toString(__int128 n) {
+    if (n == 0) return "0";
+    bool neg = n < 0;
+    if (neg) n = -n;
+    string s;
+    while (n > 0) {
+        s.push_back('0' + (n % 10));
+        n /= 10;
+    }
+    if (neg) s.push_back('-');
+    reverse(s.begin(), s.end());
+    return s;
+}
+
+// Helper function to convert string to __int128
+__int128 toInt128(const string &s) {
+    __int128 res = 0;
+    for (char c : s) {
+        res = res * 10 + (c - '0');
+    }
+    return res;
+}
+
+int gcd(int a, int b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
