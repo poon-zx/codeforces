@@ -48,6 +48,14 @@ void solve() {
   cin>>n>>m;
   vector<ll> a(m);
   for (int i=0;i<m;i++) cin>>a[i];
+  sort(a.begin(),a.end());
+  ll res=0;
+  for (ll i=1;i<n;i++) {
+    ll x=lower_bound(a.begin(),a.end(),i)-a.begin();
+    ll y=lower_bound(a.begin(),a.end(),n-i)-a.begin();
+    res+=(m-x)*(m-y)-min(m-x,m-y);
+  }
+  cout<<res<<"\n";
 }
 
 int main() {

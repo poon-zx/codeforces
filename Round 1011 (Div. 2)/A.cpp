@@ -44,25 +44,22 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int x,n,m;
-  cin>>x>>n>>m;
-  n=min(32,n);
-  m=min(32,m);
-  // min apply all ceil then floor
-  int y=x,a=n,b=m;
-  while (b--) {
-    y=(y+1)>>1;
+  int n,k;
+  string s;
+  cin>>n>>k>>s;
+  if (k==0) {
+    string rev=string(s.rbegin(),s.rend());
+    if (s<rev) cout<<"YES"<<"\n";
+    else cout<<"NO"<<"\n";
+  } else {
+    char c=s[0];
+    bool same=true;
+    for (char ch:s) {
+      if (ch!=c) same=false;
+    }
+    if (same) cout<<"NO"<<"\n";
+    else cout<<"YES"<<"\n";
   }
-  while (a--) {
-    y>>=1;
-  }
-  while (n--) {
-    x>>=1;
-  }
-  while (m--) {
-    x=(x+1)>>1;
-  }
-  cout<<y<<" "<<x<<"\n";
 }
 
 int main() {
