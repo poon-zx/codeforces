@@ -335,3 +335,27 @@ public:
 int gcd(int a, int b) {
     return b == 0 ? a : gcd(b, a % b);
 }
+
+bool isPrime(int number){
+
+    if(number < 2) return false;
+    if(number == 2) return true;
+    if(number % 2 == 0) return false;
+    for(int i=3; (i*i)<=number; i+=2){
+        if(number % i == 0 ) return false;
+    }
+    return true;
+
+}
+
+vector<bool> sieve(int n){
+    vector<bool> is_prime(n+1, true);
+    is_prime[0] = is_prime[1] = false;
+    for (int i = 2; i <= n; i++) {
+        if (is_prime[i] && (long long)i * i <= n) {
+            for (int j = i * i; j <= n; j += i)
+                is_prime[j] = false;
+        }
+    }
+    return is_prime;
+}
