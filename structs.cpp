@@ -359,3 +359,27 @@ vector<bool> sieve(int n){
     }
     return is_prime;
 }
+
+// Extended Euclidean Algorithm to compute gcd and the coefficients x and y for Bézout's identity: ax + by = gcd(a, b)
+int extended_gcd(int a, int b, int &x, int &y) {
+    if (b == 0) {
+        x = 1; y = 0;
+        return a;
+    }
+    int gcd = extended_gcd(b, a % b, y, x);
+    y -= (a / b) * x;
+    return gcd;
+}
+
+// Function to compute modular inverse of a modulo m
+int mod_inverse(int a, int m) {
+    int x, y;
+    int g = extended_gcd(a, m, x, y);
+    if (g != 1) {
+        // In our problem, this should never happen since a and m are coprime
+        return -1;
+    }
+    // Make sure the result is positive
+    x = (x % m + m) % m;
+    return x;
+}
