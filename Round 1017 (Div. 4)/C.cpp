@@ -44,20 +44,26 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  ll ans=0;
-  priority_queue<int> pq;
+  int n;
+  cin>>n;
+  vector<bool> v(2*n+1,false);
+  vector<int> res(2*n+1,0);
   for (int i=1;i<=n;i++) {
-    int t;
-    cin>>t;
-    pq.push(t);
-    if ((n-i+1)%(k+1)==0) {
-      ans+=(ll)pq.top();
-      pq.pop();
+    for (int j=1;j<=n;j++) {
+      int a;
+      cin>>a;
+      res[i+j]=a;
+      v[a]=true;
     }
   }
-  cout<<ans<<"\n";
+  for(int i=1;i<=2*n;i++) {
+    if(!v[i]) {
+      res[1]=i;
+      break;
+    }
+  }
+  for(int i=1;i<=2*n;i++) cout<<res[i]<<" ";
+  cout<<"\n";
 }
 
 int main() {

@@ -29,9 +29,9 @@ struct DSU {
 
 class FenwickTree {
  public:
-  FenwickTree(int n) : n(n), tree(n + 1, 0) {}
+  FenwickTree(int n) : n(n), tree(n + 1, 0LL) {}
 
-  FenwickTree(std::vector<int>& data): FenwickTree(data.size()) {
+  FenwickTree(std::vector<ll>& data): FenwickTree(data.size()) {
     for (int i = 1; i <= n; ++i) {
         tree[i] = data[i-1];
         int parent = i + (i & -i);
@@ -41,52 +41,26 @@ class FenwickTree {
     }
   }
 
-
   int query(int l, int r) const { return prefix(r) - prefix(l-1); }
 
-  void update(int i, int diff) {
+  void update(int i, ll diff) {
     for (; i <= n; i += i & -i) {
       tree[i] += diff;
     }
   }
 
-  int prefix(int i) const {
-    int sum = 0;
+  ll prefix(int i) const {
+    ll sum = 0;
     for (; i > 0; i -= i & -i) {
       sum += tree[i];
     }
     return sum;
   }
 
- private:
+  private:
   const int n;
-  std::vector<int> tree;
+  std::vector<ll> tree;
 };
-
-// Helper function to convert __int128 to string
-// only to 10^38
-string toString(__int128 n) {
-    if (n == 0) return "0";
-    bool neg = n < 0;
-    if (neg) n = -n;
-    string s;
-    while (n > 0) {
-        s.push_back('0' + (n % 10));
-        n /= 10;
-    }
-    if (neg) s.push_back('-');
-    reverse(s.begin(), s.end());
-    return s;
-}
-
-// Helper function to convert string to __int128
-__int128 toInt128(const string &s) {
-    __int128 res = 0;
-    for (char c : s) {
-        res = res * 10 + (c - '0');
-    }
-    return res;
-}
 
 class BigInt {
 public:
@@ -329,6 +303,12 @@ public:
         // except if the result is zero.
         result.negative = (this->negative != other.negative) && (result.s != "0");
         return result;
+    }
+
+    // Less-than-or-equal:
+    bool operator<=(const BigInt &other) const {
+    // a <= b  is equivalent to  !(b < a)
+      return !(other < *this);
     }
 };
 

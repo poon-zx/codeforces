@@ -44,20 +44,42 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int n,k;
+  int n;
+  ll k;
   cin>>n>>k;
-  ll ans=0;
-  priority_queue<int> pq;
-  for (int i=1;i<=n;i++) {
-    int t;
-    cin>>t;
-    pq.push(t);
-    if ((n-i+1)%(k+1)==0) {
-      ans+=(ll)pq.top();
-      pq.pop();
+  vector<ll> a(n);
+  vector<ll> b(n);
+  ll maxx=0;
+  ll minn=numeric_limits<ll>::max();
+  for (int i=0;i<n;i++) {
+    cin>>a[i];
+    maxx=max(a[i],maxx);
+    minn=min(a[i],minn);
+  }
+  for (int i=0;i<n;i++) cin>>b[i];
+  int sum=-1;
+  for (int i=0;i<n;i++) {
+    if (a[i]>=0&&b[i]>=0) {
+      if (sum!=-1&&a[i]+b[i]!=sum) {
+        cout<<0<<"\n";
+        return;
+      }
+      sum=a[i]+b[i];
     }
   }
-  cout<<ans<<"\n";
+  if (sum==-1) {
+    cout<<(minn+k)-maxx+1<<"\n";
+    return;
+  }
+  for (int i=0;i<n;i++) {
+    if (b[i]==-1) {
+      if (a[i]>sum||a[i]+k<sum) {
+        cout<<0<<"\n";
+        return;
+      }
+    }
+  }
+  cout<<1<<"\n";
 }
 
 int main() {

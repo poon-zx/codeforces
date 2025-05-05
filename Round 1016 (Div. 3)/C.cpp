@@ -43,21 +43,53 @@ constexpr array<array<int, 2>, 4> directions{{
 
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
-void solve() {
-  int n,k;
-  cin>>n>>k;
-  ll ans=0;
-  priority_queue<int> pq;
-  for (int i=1;i<=n;i++) {
-    int t;
-    cin>>t;
-    pq.push(t);
-    if ((n-i+1)%(k+1)==0) {
-      ans+=(ll)pq.top();
-      pq.pop();
+vector<bool> sieve(int n){
+    vector<bool> is_prime(n+1, true);
+    is_prime[0] = is_prime[1] = false;
+    for (int i = 2; i <= n; i++) {
+        if (is_prime[i] && (long long)i * i <= n) {
+            for (int j = i * i; j <= n; j += i)
+                is_prime[j] = false;
+        }
     }
+    return is_prime;
+}
+
+bool isPrime(int number){
+
+    if(number < 2) return false;
+    if(number == 2) return true;
+    if(number % 2 == 0) return false;
+    for(int i=3; (i*i)<=number; i+=2){
+        if(number % i == 0 ) return false;
+    }
+    return true;
+
+}
+
+void solve() {
+  string x;
+  int k;
+  cin>>x>>k;
+  bool all_ones=true;
+  int y=stoi(x);
+  for (char c:x) {
+    if (c!='1') all_ones=false;
   }
-  cout<<ans<<"\n";
+  if (k>1&&!all_ones) {
+    cout<<"NO"<<"\n";
+    return;
+  }
+  if (all_ones) {
+    unordered_set<int> ones={2,19,23,317,1031};
+    if (ones.find(k*x.size())!=ones.end()) {
+      cout<<"YES"<<"\n";
+    } else {
+      cout<<"NO"<<"\n";
+    }
+    return;
+  }
+  cout<<(isPrime(y)?"YES":"NO")<<"\n";
 }
 
 int main() {

@@ -43,21 +43,47 @@ constexpr array<array<int, 2>, 4> directions{{
 
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
+const int maxn=200100;
+
+int n,a[maxn],b[maxn],m,p[maxn],ans[maxn][2];
+
+void work(int x,int y) {
+  if (x==y) return;
+  ans[++m][0]=x;
+	ans[m][1]=y;
+	swap(a[x],a[y]);
+	swap(p[a[x]],p[a[y]]);
+	swap(b[x],b[y]);
+}
+
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  ll ans=0;
-  priority_queue<int> pq;
+  int n;
+  cin>>n;
   for (int i=1;i<=n;i++) {
-    int t;
-    cin>>t;
-    pq.push(t);
-    if ((n-i+1)%(k+1)==0) {
-      ans+=(ll)pq.top();
-      pq.pop();
+    cin>>a[i];
+    p[a[i]]=i;
+  }
+  for (int i=1;i<=n;i++) cin>>b[i];
+  m=0;
+  int x=0;
+  for (int i=1;i<=n;i++) {
+    if (a[i]==b[i]) {
+      if (n%2==0||x) {
+        cout<<"-1\n";
+        return;
+      }
+      x=i;
+    } else if (b[p[b[i]]]!=a[i]) {
+      cout<<"-1\n";
+      return;
     }
   }
-  cout<<ans<<"\n";
+  if (n&1) work(x,(n+1)/2);
+  for (int i=1;i<=n/2;i++) {
+    work(p[b[i]],n-i+1);
+  }
+  cout<<m<<"\n";
+  for (int i=1;i<=m;i++) cout<<ans[i][0]<<" "<<ans[i][1]<<"\n";
 }
 
 int main() {

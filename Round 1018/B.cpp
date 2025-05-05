@@ -46,18 +46,19 @@ constexpr array<array<int, 2>, 4> directions{{
 void solve() {
   int n,k;
   cin>>n>>k;
-  ll ans=0;
-  priority_queue<int> pq;
-  for (int i=1;i<=n;i++) {
-    int t;
-    cin>>t;
-    pq.push(t);
-    if ((n-i+1)%(k+1)==0) {
-      ans+=(ll)pq.top();
-      pq.pop();
-    }
+  vector<pair<ll,ll>> l(n,pair<ll,ll>());
+  for (int i=0;i<n;i++) cin>>l[i].first;
+  for (int i=0;i<n;i++) cin>>l[i].second;
+  ll res=0;
+  vector<ll> minss(n);
+  for (int i=0;i<n;i++) {
+    res+=max(l[i].first,l[i].second);
+    minss[i]=min(l[i].first,l[i].second);
   }
-  cout<<ans<<"\n";
+  sort(minss.begin(),minss.end(),greater<ll>());
+  for (int i=0;i<k-1;i++) res+=minss[i];
+  res+=1;
+  cout<<res<<"\n";
 }
 
 int main() {

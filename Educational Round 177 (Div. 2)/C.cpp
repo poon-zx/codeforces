@@ -44,20 +44,49 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  ll ans=0;
-  priority_queue<int> pq;
+  int n;
+  cin>>n;
+  vector<int> v1(n+1);
+  vector<int> v2(n+1);
   for (int i=1;i<=n;i++) {
-    int t;
-    cin>>t;
-    pq.push(t);
-    if ((n-i+1)%(k+1)==0) {
-      ans+=(ll)pq.top();
-      pq.pop();
+    cin>>v1[i];
+  }
+  for (int i=1;i<=n;i++) {
+    cin>>v2[i];
+  }
+  vector<bool> visit(n+1,false);
+  vector<int> len(n+1,0);
+  for (int i=1;i<=n;i++) {
+    if (visit[i]) continue;
+    int a=i;
+    int length=0;
+    while (!visit[a]) {
+      visit[a]=true;
+      a=v1[a];
+      length++;
+      if (a==i) {
+        int j=i;
+        do {
+          len[j]=length;
+          j=v1[j];
+        } while (j!=i);
+        break;
+      }
     }
   }
-  cout<<ans<<"\n";
+  visit=vector<bool>(n+1,false);
+  int res=0;
+  for (int i=1;i<=n;i++) {
+    res+=len[v2[i]];
+    int j=v2[i];
+    while (!visit[j]) {
+      visit[j]=true;
+      len[j]=0;
+      j=v1[j];
+    }
+    cout<<res<<" ";
+  }
+  cout<<"\n";
 }
 
 int main() {

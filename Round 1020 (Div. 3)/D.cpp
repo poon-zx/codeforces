@@ -44,20 +44,37 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  int n,k;
-  cin>>n>>k;
-  ll ans=0;
-  priority_queue<int> pq;
-  for (int i=1;i<=n;i++) {
-    int t;
-    cin>>t;
-    pq.push(t);
-    if ((n-i+1)%(k+1)==0) {
-      ans+=(ll)pq.top();
-      pq.pop();
-    }
+  int n,m;
+  cin>>n>>m;
+  vector<int> a(n);
+  vector<int> b(m);
+  for (int i=0;i<n;i++) cin>>a[i];
+  for (int i=0;i<m;i++) {
+    cin>>b[i];
   }
-  cout<<ans<<"\n";
+  vector<int> backwards(m);
+  int j=n-1;
+  for (int i=m-1;i>=0;i--) {
+    while(j>=0&&a[j]<b[i]) j--;
+    backwards[i]=j--;
+  }
+  vector<int> forwards(m);
+  j=0;
+  for (int i=0;i<m;i++) {
+    while(j<n&&a[j]<b[i]) j++;
+    forwards[i]=j++;
+  }
+  if(forwards.back()<n) {
+    cout<<0<<endl;
+    return;
+  }
+  int ans=MOD;
+  for(int i=0;i<m;i++) {
+    int match_prev=i==0?-1:forwards[i-1];
+    int match_next=i+1==m?n:backwards[i+1];
+    if(match_next>match_prev) ans=min(ans,b[i]);
+  }
+  cout<<(ans==MOD?-1:ans)<<"\n";
 }
 
 int main() {
