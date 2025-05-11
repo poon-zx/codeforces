@@ -1,9 +1,10 @@
 struct DSU {
-    vector<int> parent, rank;
+    vector<int> parent, rank, sz;
     
     DSU(int n) {
         parent.resize(n);
         rank.assign(n, 0);
+        sz.assign(n,1);
         for (int i = 0; i < n; i++)
             parent[i] = i;
     }
@@ -21,10 +22,13 @@ struct DSU {
         if (rank[a] < rank[b])
             swap(a, b);
         parent[b] = a;
+        sz[a] += sz[b];
         if (rank[a] == rank[b])
             rank[a]++;
         return true;
     }
+
+    int size(int a) {return sz[find(a)];}
 };
 
 class FenwickTree {
@@ -310,56 +314,43 @@ public:
     // a <= b  is equivalent to  !(b < a)
       return !(other < *this);
     }
+
+    static BigInt modPow(BigInt base, BigInt exp, const BigInt &mod) {
+    BigInt result("1");
+    BigInt zero("0"), two("2");
+
+    base = base % mod;
+    // while exp > 0
+    while (exp > zero) {
+      // exp.divmod(two) gives (quotient, remainder)
+      auto qr = exp.divmod(two);
+      BigInt q = qr.first, r = qr.second;
+
+      if (r == BigInt("1"))                // if (exp % 2 == 1)
+        result = (result * base) % mod;    // result *= base mod
+
+      base = (base * base) % mod;          // base = base^2 mod
+      exp  = q;                            // exp >>= 1
+    }
+
+    return result;
+  }
+
+  bool operator>(const BigInt &o) const { return o < *this; }
 };
 
-int gcd(int a, int b) {
-    return b == 0 ? a : gcd(b, a % b);
-}
+// pb_ds order statistics tree
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 
-bool isPrime(int number){
+using namespace __gnu_pbds;
 
-    if(number < 2) return false;
-    if(number == 2) return true;
-    if(number % 2 == 0) return false;
-    for(int i=3; (i*i)<=number; i+=2){
-        if(number % i == 0 ) return false;
-    }
-    return true;
+typedef pair<int, int> pii;
+typedef tree<pii, null_type, less<pii>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 
-}
+ordered_set o;
+o.insert({t,i});
+male.order_of_key(first); // number of keys STRICTLY LESS than first
+auto it=o.find_by_order(o.size()/2);
 
-vector<bool> sieve(int n){
-    vector<bool> is_prime(n+1, true);
-    is_prime[0] = is_prime[1] = false;
-    for (int i = 2; i <= n; i++) {
-        if (is_prime[i] && (long long)i * i <= n) {
-            for (int j = i * i; j <= n; j += i)
-                is_prime[j] = false;
-        }
-    }
-    return is_prime;
-}
-
-// Extended Euclidean Algorithm to compute gcd and the coefficients x and y for Bézout's identity: ax + by = gcd(a, b)
-int extended_gcd(int a, int b, int &x, int &y) {
-    if (b == 0) {
-        x = 1; y = 0;
-        return a;
-    }
-    int gcd = extended_gcd(b, a % b, y, x);
-    y -= (a / b) * x;
-    return gcd;
-}
-
-// Function to compute modular inverse of a modulo m
-int mod_inverse(int a, int m) {
-    int x, y;
-    int g = extended_gcd(a, m, x, y);
-    if (g != 1) {
-        // In our problem, this should never happen since a and m are coprime
-        return -1;
-    }
-    // Make sure the result is positive
-    x = (x % m + m) % m;
-    return x;
-}
+// END ---- pb_ds order statistics tree
