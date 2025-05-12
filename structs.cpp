@@ -348,9 +348,11 @@ using namespace __gnu_pbds;
 typedef pair<int, int> pii;
 typedef tree<pii, null_type, less<pii>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 
+// this is a set so store as a pair if you want duplicates
 ordered_set o;
 o.insert({t,i});
 male.order_of_key(first); // number of keys STRICTLY LESS than first
-auto it=o.find_by_order(o.size()/2);
+auto it=o.find_by_order(o.size()/2); // 0-indexed
+female.erase(female.find(name));
 
 // END ---- pb_ds order statistics tree
