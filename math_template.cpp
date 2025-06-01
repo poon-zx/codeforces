@@ -144,3 +144,6 @@ bool IsProbablePrime(ll n, int rounds = 20) {
     return true;  // probably prime
 }
 /// END IS PROBABLE PRIME
+
+//arithmetic
+sn=n/2*(2*a+(n-1)*d);
