@@ -43,16 +43,13 @@ constexpr array<array<int, 2>, 4> directions{{
 
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
+
+
 void solve() {
-  string s;
-  cin>>s;
-  int cnt=0;
-  for(int i=0;i<s.size();i++) {
-    if(s[i]=='(') cnt++;
-    else cnt--;
-    if(cnt==0&&i!=s.size()-1) {cout<<"YES"<<endl;return;}
-  }
-  cout<<"NO"<<endl;
+  int n;
+  cin>>n;
+  int ans=2*(int)floor(log2(n))+3;
+  cout<<ans<<endl;
 }
 
 int main() {

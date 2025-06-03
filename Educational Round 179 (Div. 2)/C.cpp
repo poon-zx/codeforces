@@ -44,15 +44,23 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  string s;
-  cin>>s;
-  int cnt=0;
-  for(int i=0;i<s.size();i++) {
-    if(s[i]=='(') cnt++;
-    else cnt--;
-    if(cnt==0&&i!=s.size()-1) {cout<<"YES"<<endl;return;}
+  int n;
+  cin>>n;
+  vector<int> v(n);
+  for(int i=0;i<n;i++) cin>>v[i];
+  int i=0;
+  ll res=numeric_limits<ll>::max();
+  while(i<n) {
+    int curr=v[i];
+    int cnt=1;
+    while(i+1<n&&v[i+1]==curr) {
+      i++;
+      cnt++;
+    }
+    res=min(res,(ll)(n-cnt)*(ll)curr);
+    i++;
   }
-  cout<<"NO"<<endl;
+  cout<<res<<endl;
 }
 
 int main() {

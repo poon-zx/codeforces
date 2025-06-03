@@ -44,15 +44,41 @@ constexpr array<array<int, 2>, 4> directions{{
 // vector<vector<int>> v(3, vector<int>(4,0) 3x4 filled with 0s
 
 void solve() {
-  string s;
-  cin>>s;
-  int cnt=0;
-  for(int i=0;i<s.size();i++) {
-    if(s[i]=='(') cnt++;
-    else cnt--;
-    if(cnt==0&&i!=s.size()-1) {cout<<"YES"<<endl;return;}
+  //
+  int n, m;
+  std::cin >> n >> m;
+
+  std::vector<int> rooms(m);
+  for (int i = 0; i < m; ++i) {
+    std::cin >> rooms[i];
   }
-  cout<<"NO"<<endl;
+
+  std::ranges::sort(rooms);
+  std::span<int> smallestN{rooms.begin(), rooms.begin() + n};
+  std::span<int> biggestN{rooms.end() - n, rooms.end()};
+
+  // std::array<std::span<int>, 2> sorted{{smallestN, biggestN}};
+
+  for (int i = 0; i < n; ++i) {
+    int idx = i / 2;
+    for (int j = 0; j < 6; ++j) {
+      if (i % 2 == 0) {
+        if (j % 2 == 0) {
+          std::cout << smallestN[idx];
+        } else {
+          std::cout << biggestN[n - 1 - idx];
+        }
+      } else {
+        if (j % 2 == 0) {
+          std::cout << biggestN[n - 1 - idx];
+        } else {
+          std::cout << smallestN[idx];
+        }
+      }
+      std::cout << ' ';
+    }
+    std::cout << '\n';
+  }
 }
 
 int main() {
